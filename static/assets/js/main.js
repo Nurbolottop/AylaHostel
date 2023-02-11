@@ -539,7 +539,10 @@
                 scrollTop: 0
             }, 700);
         });
-
+        $(document).on('click', '.back-to-top1', function() {
+            $("html,body").animate({
+            }, 700);
+        });
     });
     /* 
     ========================================

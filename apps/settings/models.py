@@ -271,3 +271,23 @@ class Team(models.Model):
     class Meta:
         verbose_name = "Команда"
         verbose_name_plural = "Команды"
+        
+class WeAre(models.Model):
+    url = models.URLField(
+        verbose_name="Основная ссылка",
+        blank=True,null= True
+    )
+    image = ResizedImageField(
+        force_format="WEBP", 
+        quality=100, 
+        upload_to='where_we_are/',
+        verbose_name="Основная фотография",
+        blank = True, null = True
+    )
+
+    def __str__(self):
+        return f"{self.url} -- {self.image}"
+
+    class Meta:
+        verbose_name = "Где мы есть ?"
+        verbose_name_plural = "Где мы есть ?"

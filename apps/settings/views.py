@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from apps.settings.models import Setting, Contact, Review, Gallery, FAQ, News, Promotion, Benefit, Team
+from apps.settings.models import Setting, Contact, Review, Gallery, FAQ, News, Promotion, Benefit, Team,WeAre
 from apps.rooms.models import Room
 
 # Create your views here.
@@ -9,6 +9,7 @@ def index(request):
         setting = Setting.objects.latest('id')
     except:
         return redirect('error_page')
+    weare = WeAre.objects.all().order_by('-id')[:10]
     rooms = Room.objects.all().order_by('?')[:10]
     reviews = Review.objects.all().order_by('?')[:5]
     faqs = FAQ.objects.all().order_by('id')
@@ -31,6 +32,7 @@ def index(request):
         'news' : news,
         'galleries' : galleries,
         'benefits' : benefits,
+        'weare' : weare,
     }
     return render(request, 'index.html', context)
 
