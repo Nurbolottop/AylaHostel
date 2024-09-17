@@ -1,14 +1,24 @@
 from django.contrib import admin
-from apps.settings.models import Setting, Contact, Reservation, Review, Gallery, FAQ, News, Promotion, Benefit, Team
+from modeltranslation.admin import TranslationAdmin
+
+from apps.settings.models import Setting, PhoneNumber ,Partners, Contact, Gallery, FAQ, News, Promotion, Benefit, Team,WeAre, About
 
 # Register your models here.
-admin.site.register(Setting)
+class SettingAdmin(TranslationAdmin):
+    list_display = ('title', 'description')
+
+class BenefitAdmin(TranslationAdmin):
+    list_display = ('id', 'title', 'description')
+
+admin.site.register(Setting, SettingAdmin)
+admin.site.register(PhoneNumber)
 admin.site.register(Contact)
-admin.site.register(Reservation)
-admin.site.register(Review)
 admin.site.register(Gallery)
 admin.site.register(FAQ)
 admin.site.register(News)
 admin.site.register(Promotion)
-admin.site.register(Benefit)
+admin.site.register(Benefit, BenefitAdmin)
 admin.site.register(Team)
+admin.site.register(WeAre)
+admin.site.register(Partners)
+admin.site.register(About)

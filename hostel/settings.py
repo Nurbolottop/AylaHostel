@@ -22,38 +22,62 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config.SECRET_KEY
+
+#Nurbolot
+# SECRET_KEY = 'django-insecure-pyp6y!=5j40y51lsja+8_c42ygn2j$*h*ogn4-nk%twy&n94g('
+
+#Kurmanbek
+SECRET_KEY = config.SECRET_KEY 
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+#Nurbolot
+# DEBUG =  True
+
+#Kurmanbek
 DEBUG = config.DEBUG
 
-ALLOWED_HOSTS = config.ALLOWED_HOSTS
+#Nurbolot
+# ALLOWED_HOSTS =["*"]
+
+#Kurmanbek
+ALLOWED_HOSTS = config.ALLOWED_HOSTS 
+
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    #translate
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
 
     #apps
     'apps.settings',
     'apps.rooms',
     'apps.users',
+    'apps.telegram',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
 ]
 
 ROOT_URLCONF = 'hostel.urls'
@@ -62,7 +86,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            #Kurmanbek
             os.path.join(BASE_DIR, 'templates')
+            
+            # BASE_DIR / 'templates'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -82,6 +109,15 @@ WSGI_APPLICATION = 'hostel.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+#Nurbolot
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+#Kurmanbek
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -123,10 +159,25 @@ USE_I18N = True
 
 USE_TZ = True
 
+#translation
+gettext = lambda s: s
+LANGUAGES = (
+    ('ky', gettext('Kyrgyz')),
+    ('ru', gettext('Russian')),
+    ('en', gettext('English')),
+)
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
+# MODELTRANSLATION_TRANSLATION_REGISTRY = 'rooms.translation'
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+#Kurmanbek
 STATIC_URL = 'static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -134,9 +185,24 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 
+#Nurbolot
+# STATIC_URL = 'static/'
+# STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# MEDIA_URL = 'media/'
+# MEDIA_ROOT = BASE_DIR / 'media'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
+#Kurmanbek
+
+TELEGRAM_TOKEN = config.TOKEN
+
+
+#Nurbolot
+# TELEGRAM_TOKEN = "5718814185:AAHPC4RP-s_2zXgSjRRADjh-Qd_Lb95x7mM"
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# AUTH_USER_MODELS = 'users.User'
+AUTH_USER_MODEL = 'users.User'

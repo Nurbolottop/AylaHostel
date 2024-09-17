@@ -1,8 +1,6 @@
 from django.db import models
 from django_resized.forms import ResizedImageField
 
-from apps.rooms.models import Room
-
 # Create your models here.
 class Setting(models.Model):
     title = models.CharField(
@@ -16,11 +14,6 @@ class Setting(models.Model):
     logo = models.ImageField(
         upload_to="logos/",
         verbose_name="Логотип сайта"
-    )
-    phone = models.CharField(
-        max_length=100,
-        verbose_name="Телефонный номер",
-        blank = True, null = True
     )
     email = models.EmailField(
         verbose_name="Почта",
@@ -49,6 +42,10 @@ class Setting(models.Model):
         verbose_name="Ссылка на instagram",
         blank = True, null = True
     )
+    instagram_url = models.URLField(
+        verbose_name="Ссылка на iframe instagram",
+        blank=True, null=True
+    )
     whatsapp = models.URLField(
         verbose_name="Ссылка на WhatsApp",
         blank = True, null = True
@@ -57,6 +54,21 @@ class Setting(models.Model):
         verbose_name="Ссылка на Telegram",
         blank = True, null = True
     )
+    id_reservation = models.CharField(
+        max_length=100,
+        verbose_name="ID чата для бронь",
+        blank=True, null=True
+    )
+    id_contact = models.CharField(
+        max_length=100,
+        verbose_name="ID чата для контактов",
+        blank=True, null=True
+    )
+    id_review = models.CharField(
+        max_length=100,
+        verbose_name="ID чата для отзывов",
+        blank=True, null=True
+    )
 
     def __str__(self):
         return self.title 
@@ -64,6 +76,19 @@ class Setting(models.Model):
     class Meta:
         verbose_name = "Настройка"
         verbose_name_plural = "Настройки"
+
+class PhoneNumber(models.Model):
+    phone = models.CharField(
+        max_length=100,
+        verbose_name="Телефонный номер"
+    )
+
+    def __str__(self):
+        return self.phone
+    
+    class Meta:
+        verbose_name = "Телефонный номер"
+        verbose_name_plural = "Телефонные номера"
 
 class Contact(models.Model):
     name = models.CharField(
@@ -91,66 +116,6 @@ class Contact(models.Model):
     class Meta:
         verbose_name = "Контакт"
         verbose_name_plural = "Контакты"
-
-class Reservation(models.Model):
-    room = models.ForeignKey(
-        Room, 
-        on_delete=models.SET_NULL,
-        related_name="room_reservation",
-        null = True
-    )
-    first_name = models.CharField(
-        max_length=100,
-        verbose_name="Фамилия"
-    )
-    last_name = models.CharField(
-        max_length=100,
-        verbose_name="Имя"
-    )
-    phone_number = models.CharField(
-        max_length=100,
-        verbose_name="Телефонный номер"
-    )
-    created = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Дата создания"
-    )
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-
-    class Meta:
-        verbose_name = "Бронь"
-        verbose_name_plural = "Брони"
-
-class Review(models.Model):
-    room = models.ForeignKey(
-        Room, 
-        on_delete=models.CASCADE,
-        related_name="room_review",
-        verbose_name="Комната"
-    )
-    name = models.CharField(
-        max_length=100,
-        verbose_name="Имя"
-    )
-    text = models.TextField(
-        verbose_name="Текст"
-    )
-    checked = models.BooleanField(
-        default=False,
-        verbose_name="Проверка"
-    )
-    created = models.DateTimeField(
-        auto_now_add=True
-    )
-
-    def __str__(self):
-        return f"{self.name} {self.text}"
-
-    class Meta:
-        verbose_name = "Отзыв"
-        verbose_name_plural = "Отзывы"
 
 class Gallery(models.Model):
     image = ResizedImageField(
@@ -271,3 +236,56 @@ class Team(models.Model):
     class Meta:
         verbose_name = "Команда"
         verbose_name_plural = "Команды"
+
+class About(models.Model):
+    title = models.TextField(
+        verbose_name="О нас"
+    )
+        
+    def __str__(self):
+        return self.title 
+    
+    class Meta:
+        verbose_name = "О нас"
+        verbose_name_plural = "О нас"
+
+class WeAre(models.Model):
+    url = models.URLField(
+        verbose_name="Основная ссылка",
+        blank=True,null= True
+    )
+    image = ResizedImageField(
+        force_format="WEBP", 
+        quality=100, 
+        upload_to='where_we_are/',
+        verbose_name="Основная фотография",
+        blank = True, null = True
+    )
+
+    def __str__(self):
+        return f"{self.url} -- {self.image}"
+
+    class Meta:
+        verbose_name = "Где мы есть?"
+        verbose_name_plural = "Где мы есть?"
+
+class Partners(models.Model):
+    url = models.URLField(
+        verbose_name="Основная ссылка",
+        blank=True,null= True
+    )
+    image = ResizedImageField(
+        force_format="WEBP", 
+        quality=100, 
+        upload_to='parners/',
+        verbose_name="Основная фотография",
+        blank = True, null = True
+    )
+
+    def __str__(self):
+        return f"{self.url} -- {self.image}"
+
+    class Meta:
+        verbose_name = "Наш партер"
+        verbose_name_plural = "Наши партеры"
+        

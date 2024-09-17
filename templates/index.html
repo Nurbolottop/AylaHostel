@@ -1,5 +1,5 @@
 {% extends 'homepage.html' %}
-{% load static %}
+{% load static i18n %}
 {% block content %}
     {% include 'include/header.html' %}
     <div class="banner-area banner-area-one">
@@ -8,26 +8,33 @@
           <div class="col-lg-6">
             <div class="banner-single banner-single-one percent-padding">
               <div class="banner-single-content">
-                <h2 class="banner-single-content-title fw-700"> Добро пожаловать в {{ setting.title }} </h2>
+                <h2 class="banner-single-content-title fw-700">{% trans 'Добро пожаловать в'  %} {{ setting.title }}</h2>
                 <p class="banner-single-content-para mt-3"> {{ setting.description }} </p>
+                <h6 class="fw-900 mt-3"> {% trans 'Наши контакты:' %} </h6>
+                <a href="{{ setting.address_url }}"><p class="fw-900 mt-1"> {% trans 'Адрес:' %} {{ setting.address }} </p></a>
+                <a href="mailto:{{ setting.email }}"><p class="fw-900 mt-1"> {% trans 'Почта:' %} {{ setting.email }} </p></a>
+                {% for phon in phone %}
+                <a href="tel:{{ phon.phone }}"><p class="fw-900 mt-1"> {{ phon.phone }} </p></a>
+                {% endfor %}
                 <div class="banner mt-3">
                     <div class="btn-wrapper">
-                      <a href="{% url 'reservation' %}" class="cmn-btn btn-bg-1 btn-small"> Забронировать </a>
+                      <a href="{% url 'reservation' %}" class="cmn-btn btn-bg-1 btn-small"> {% trans 'Забронировать' %} </a>
+                      <a href="{% url 'contact' %}" class="cmn-btn btn-bg-1 btn-small"> {% trans 'Связаться' %} </a>
                     </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-lg-6 bg-image banner-right-bg radius-20" style="background-image: url({{ setting.backround_image.url }});"></div>
+          <div class="col-lg-6 bg-image banner-right-bg radius-20" style="background-image: url({{ setting.backround_image.url }}); overflow:hidden;"></div>
         </div>
       </div>
     </div>
     {% if rooms %}
     <section class="attraction-area pat-50 pab-50">
       <div class="container">
-        <div class="section-title text-left append-flex">
-          <h2 class="banner-single-content-title fw-700"> Наши номера </h2>
-          <div class="append-attraction"></div>
+        <div class="section-title center-text mt-5">
+          <h2 class="banner-single-content-title fw-700 mt-5"> {% trans 'Наши номера' %} </h2>
+          <div class="append-attraction" style="display: none;"></div>
         </div>
         <div class="row mt-5">
           <div class="col-12">
@@ -50,7 +57,12 @@
                     <h4 class="single-attraction-contents-title">
                       <a href="{% url 'room_detail' room.id %}"> {{ room.title }} </a>
                     </h4>
-                    <p class="single-attraction-contents-para"> Цена от: {{ room.price_day }} {{ room.currency }} </p>
+                    <div class="hotel-view-contents-bottom-contents">
+                      <h5 class="hotel-view-contents-bottom-title"><sub>  {% trans 'От' %} {{ room.price_day }} {{ room.currency }} </sub> </h5>
+                    </div>`
+                    <div class="btn-wrapper mt-3">
+                      <a href="{% url 'reservation_room' room.id %}" class="cmn-btn btn-bg-1 btn-small"> {% trans 'Забронировать' %} </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -62,11 +74,12 @@
       </div>
     </section>
     {% endif %}
+    
     {% if benefits %}
     <section class="booking-area pat-100 pab-50">
       <div class="container">
         <div class="section-title center-text">
-          <h2 class="title"> Почему мы? </h2>
+          <h2 class="banner-single-content-title fw-700 mt-5"> {% trans 'Почему мы?' %} </h2>
           <div class="section-title-shapes"></div>
         </div>
         <div class="row gy-4 mt-5">
@@ -88,30 +101,55 @@
       </div>
     </section>
     {% endif %}
+    {% if weare %}
+    <section class="partner-area pat-50 pab-100">
+      <div class="container">
+        <div class="section-title center-text">
+          <h2 class="banner-single-content-title fw-700 mt-5"> {% trans 'Где мы есть?' %} </h2>
+          <div class="section-title-shapes"></div>
+        </div>
+        <div class="row mt-5">
+          <div class="col-12">
+            <div class="global-slick-init attraction-slider slider-inner-margin" data-slidesToShow="6" data-infinite="true" data-arrows="false" data-dots="false" data-swipeToSlide="true" data-autoplay="true" data-autoplaySpeed="2500" data-prevArrow='
+																														<div class="prev-icon">
+																															<i class="las la-angle-left"></i>
+																														</div>' data-nextArrow='
+																														<div class="next-icon">
+																															<i class="las la-angle-right"></i>
+																														</div>' data-responsive='[{"breakpoint": 1400,"settings": {"slidesToShow": 5}},{"breakpoint": 1200,"settings": {"slidesToShow": 4}},{"breakpoint": 992,"settings": {"slidesToShow": 3}},{"breakpoint": 576, "settings": {"slidesToShow": 2} }]'>
+              {% for we in weare %}                                             
+                <div class="single-brand">
+                  <a href="{{we.url}}" class="single-brand-thumb">
+                    <img src="{{we.image.url}}" width="60%" alt="brandLogo">
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endif%}
     {% if galleries %}
     <section class="shots-area pat-50 pab-50">
       <div class="container">
         <div class="section-title center-text">
-          <h2 class="title"> Наша галерея </h2>
+          <h2 class="banner-single-content-title fw-700 mt-5"> {% trans 'Наша галерея' %} </h2>
           <div class="section-title-shapes"></div>
         </div>
         <div class="imgLoaded mt-5">
           <div class="row g-4 masonry-grid">
             {% for gallery in galleries %}
-            <div class="col-lg-2 col-md-4 col-sm-6 grid-item">
-              <div class="single-shots bg-image" style="background-image: url({{ gallery.image.url }});">
-                <a href="{{ gallery.image.url }}" class="single-shots-icon gallery-popup-two">
-                  <i class="las la-image"></i>
-                </a>
-                <div class="single-shots-contents">
-                  <!-- <h4 class="single-shots-contents-title">
-                    <a href="hotel_details.html"> Disneyland </a>
-                  </h4> -->
-                  <!-- <p class="single-shots-contents-para"> We have over 28K reviews to assure you top notch service. We have over 28K reviews to assure you top notch service.We have over 28K reviews to assure you top notch service. We have over 28K reviews to assure you top notch service. </p> -->
+              <div class="col-lg-2 col-md-4 col-sm-6 grid-item" style="padding: 10px;">
+                <div class="single-shots bg-image" style="background-image: url({{ gallery.image.url }}); background-size: cover; background-position: center center; height: 400px;">
+                  <a href="{{ gallery.image.url }}" class="single-shots-icon gallery-popup-two">
+                    <i class="las la-image"></i>
+                  </a>
                 </div>
               </div>
-            </div>
             {% endfor %}
+
+
           </div>
         </div>
       </div>
@@ -121,7 +159,7 @@
     <section class="question-area pat-50 pab-50">
       <div class="container">
         <div class="section-title center-text">
-          <h2 class="title"> Часто задаваемые вопросы </h2>
+          <h2 class="banner-single-content-title fw-700 mt-5"> {% trans 'Часто задаваемые вопросы' %} </h2>
           <div class="section-title-shapes"></div>
         </div>
         <div class="row g-4 mt-4">
@@ -141,27 +179,27 @@
           </div>
           <div class="col-xl-4 col-lg-5">
             <div class="faq-question faq-question-border radius-10 sticky-top">
-              <h3 class="faq-question-title"> У вас есть вопросы? </h3>
+              <h3 class="faq-question-title"> {% trans 'У вас есть вопросы?' %} </h3>
               <div class="faq-question-form custom-form mat-20">
                 <form method="post">
                   {% csrf_token %}
                   <div class="single-input">
-                    <label class="label-title"> Имя </label>
-                    <input type="text" name = "name" class="form--control radius-10" placeholder="Ваше имя">
+                    <label class="label-title"> {% trans 'Имя' %} </label>
+                    <input type="text" name = "name" class="form--control radius-10" placeholder="{% trans 'Ваше имя' %}">
                   </div>
                   <div class="single-input">
-                    <label class="label-title"> Номер </label>
-                    <input type="text" name = "phone_number" class="form--control radius-10" placeholder="Ваш номер">
+                    <label class="label-title"> {% trans 'Номер' %} </label>
+                    <input type="text" name = "phone_number" class="form--control radius-10" placeholder="{% trans 'Ваше имя' %}">
                   </div>
                   <div class="single-input">
-                    <label class="label-title"> Почта </label>
-                    <input type="text" name = "email" class="form--control radius-10" placeholder="Ваша почта">
+                    <label class="label-title"> {% trans 'Почта' %} </label>
+                    <input type="text" name = "email" class="form--control radius-10" placeholder="{% trans 'Ваша почта' %}">
                   </div>
                   <div class="single-input">
-                    <label class="label-title"> Вопрос </label>
-                    <textarea name="message" name = "message" class="form--control form-message radius-10" placeholder="Ваше сообщение..."></textarea>
+                    <label class="label-title"> {% trans 'Вопрос' %} </label>
+                    <textarea name="message" name = "message" class="form--control form-message radius-10" placeholder="{% trans 'Ваше сообщение...' %}"></textarea>
                   </div>
-                  <button class="submit-btn w-100 radius-10" type="submit" name = "contact"> Отправить </button>
+                  <button class="submit-btn w-100 radius-10" type="submit" name = "contact"> {% trans 'Отправить' %} </button>
                 </form>
               </div>
             </div>
@@ -170,18 +208,31 @@
       </div>
     </section>
     {% endif %}
+    {% if setting.instagram_url %}
+    <section class="blog-area pat-50 pab-50">
+      <div class="container">
+        <div class="contact-map">
+          <div class="section-title center-text">
+            <h2 class="banner-single-content-title fw-700 mt-5"> {% trans 'Наш инстаграм' %} </h2>
+            <div class="section-title-shapes"></div>
+          </div>
+          <iframe src="{{ setting.instagram_url }}" width="600" height="1000" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </section>
+    {% endif %}
     {% if news %}
     <section class="blog-area pat-50 pab-50">
       <div class="container">
         <div class="section-title center-text">
-          <h2 class="title"> Последние новости </h2>
+          <h2 class="banner-single-content-title fw-700 mt-5"> {% trans 'Последние новости' %} </h2>
           <div class="section-title-shapes"></div>
         </div>
         <div class="row gy-4 mt-4">
           {% for new in news %}
           <div class="col-xxl-4 col-lg-4 col-md-6">
             <div class="single-blog">
-              <div class="single-blog-thumbs">
+              <div class="single-blog-thumbs">    
                 <a href="{% url 'news_detail' new.id %}">
                   <img class="lazyloads" src="{{ new.image.url }}" alt="">
                 </a>
@@ -198,8 +249,7 @@
                   </span>
                 </div>
                 <h4 class="single-blog-contents-title mt-3">
-                  <a href="{% url 'news_detail' new.id %}"> {{ new.title }} </a>
-                  <p>{{ new.description|truncatewords:5 }}</p>
+                  <a href="{% url 'news_detail' new.id %}"> style="background-image: url({{ gallery.image.url }});" sp>
                 </h4>
               </div>
             </div>
@@ -219,8 +269,8 @@
                 <img src="{% static 'assets/img/single-page/newsletter-shape2.png' %}" alt="shapes">
               </div>
               <div class="newsletter-contents center-text">
-                <h3 class="newsletter-contents-title"> Подпишитесь на наши социальные сети </h3>
-                <p class="newsletter-contents-para mt-3"> Подпишитесь на наши социальные сети, чтобы получать актуальную информацию </p>
+                <h3 class="newsletter-contents-title"> {% trans 'Подпишитесь на наши социальные сети' %} </h3>
+                <p class="newsletter-contents-para mt-3"> {% trans 'Подпишитесь на наши социальные сети, чтобы получать актуальную информацию' %} </p>
                 <div class="footer-widget widget">
                   <div class="footer-widget-social mt-4">
                     <ul class="footer-widget-social-list list-style-none justify-content-center">
@@ -237,7 +287,7 @@
                           <i class="lab la-instagram"></i>
                         </a>
                       </li>
-                      {% endif %}
+                      {% endif %}    
                       {% if setting.whatsapp %}
                       <li class="footer-widget-social-list-item">
                         <a class="footer-widget-social-list-link" href="{{ setting.whatsapp }}">
@@ -250,7 +300,7 @@
                         <a class="footer-widget-social-list-link" href="{{ setting.facebook }}">
                           <i class="lab la-facebook-f"></i>
                         </a>
-                      </li>
+                      </li>    
                       {% endif %}
                     </ul>
                   </div>
@@ -266,6 +316,4 @@
         <i class="las la-angle-up"></i>
       </span>
     </div>
-    <div class="mouse-move mouse-outer"></div>
-    <div class="mouse-move mouse-inner"></div>
 {% endblock %}
